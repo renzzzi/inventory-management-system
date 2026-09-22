@@ -12,6 +12,16 @@ $routes = [
             'action' => 'showLogin'
         ],
 
+        '/create-account' => [
+            'controller' => 'AuthController',
+            'action' => 'showCreateAccount'
+        ],
+
+        '/forgot-password' => [
+            'controller' => 'AuthController',
+            'action' => 'showForgotPassword'
+        ],
+
         '/dashboard' => [
             'controller' => 'DashboardController',
             'action' => 'index'

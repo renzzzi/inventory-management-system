@@ -9,13 +9,13 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Inventory Management System</title>
+    <title>Create Account - Inventory Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Header Navigation (Same as index.php) -->
-    <nav class="bg-white shadow-sm border-b">
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <img 
@@ -34,9 +34,12 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
                 </div>
             </div>
 
-            <div>
-                <a href="<?= $base ?>/" class="bg-green-700 text-white text-sm px-4 py-2 rounded hover:bg-green-800 transition">
+            <div class="flex items-center space-x-2">
+                <a href="<?= $base ?>/" class="text-gray-600 hover:text-gray-800 text-sm px-3 py-2 rounded transition">
                     Home
+                </a>
+                <a href="<?= $base ?>/login" class="bg-green-700 text-white text-sm px-4 py-2 rounded hover:bg-green-800 transition">
+                    Login
                 </a>
             </div>
         </div>
@@ -54,10 +57,10 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
             >
 
             <h2 class="text-2xl font-bold text-gray-800 text-center mb-1">
-                Account Login
+                Create Account
             </h2>
             <p class="text-gray-500 text-xs sm:text-sm text-center mb-6">
-                Enter your credentials to access the inventory system
+                Register for staff and custodian inventory access
             </p>
 
             <?php if (!empty($error)): ?>
@@ -66,7 +69,32 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?= $base ?>/login/submit">
+            <?php if (!empty($success)): ?>
+                <div class="bg-green-100 border border-green-200 text-green-700 px-4 py-3 rounded mb-4 text-sm">
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="<?= $base ?>/create-account/submit">
+                
+                <!-- Full Name -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1" for="name">
+                        Full Name
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        autocomplete="name"
+                        value="<?= htmlspecialchars($_POST['name'] ?? '') ?>"
+                        placeholder="e.g. Maria Santos"
+                        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                    >
+                </div>
+
+                <!-- Email Address -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-medium mb-1" for="email">
                         Email Address
@@ -78,12 +106,13 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
                         required
                         autocomplete="email"
                         value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                        placeholder="e.g. custodian@deped.gov.ph"
+                        placeholder="e.g. maria.santos@deped.gov.ph"
                         class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
                     >
                 </div>
 
-                <div class="mb-6">
+                <!-- Password -->
+                <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-medium mb-1" for="password">
                         Password
                     </label>
@@ -93,7 +122,7 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
                             id="password"
                             name="password"
                             required
-                            autocomplete="current-password"
+                            autocomplete="new-password"
                             placeholder="••••••••"
                             class="w-full border border-gray-300 rounded px-3 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
                         >
@@ -114,33 +143,37 @@ $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between mb-5">
-                    <label class="flex items-center space-x-2 text-xs text-gray-600 cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            name="remember" 
-                            class="w-4 h-4 rounded border-gray-300 text-green-700 focus:ring-green-600 cursor-pointer"
-                        >
-                        <span>Remember me</span>
+                <!-- Confirm Password -->
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-medium mb-1" for="confirm_password">
+                        Confirm Password
                     </label>
-                    <a href="<?= $base ?>/forgot-password" class="text-xs text-green-700 hover:text-green-800 font-medium hover:underline">
-                        Forgot Password?
-                    </a>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        required
+                        autocomplete="new-password"
+                        placeholder="••••••••"
+                        class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600"
+                    >
                 </div>
 
+                <!-- Submit Button (Solid Green, No Gradient) -->
                 <button
                     type="submit"
                     class="w-full bg-green-700 text-white font-medium py-2.5 px-4 rounded hover:bg-green-800 transition cursor-pointer"
                 >
-                    Login
+                    Create Account
                 </button>
             </form>
 
+            <!-- Back to Login Link -->
             <div class="mt-6 pt-5 border-t border-gray-100 text-center">
                 <p class="text-xs text-gray-600">
-                    Don't have an account? 
-                    <a href="<?= $base ?>/create-account" class="text-green-700 hover:text-green-800 font-semibold hover:underline">
-                        Create Account
+                    Already have an account? 
+                    <a href="<?= $base ?>/login" class="text-green-700 hover:text-green-800 font-semibold hover:underline">
+                        Sign In
                     </a>
                 </p>
             </div>

@@ -9,6 +9,16 @@ class AuthController
         require __DIR__ . '/../views/auth/login.php';
     }
 
+    public function showCreateAccount(): void
+    {
+        require __DIR__ . '/../views/auth/createAccount.php';
+    }
+
+    public function showForgotPassword(): void
+    {
+        require __DIR__ . '/../views/auth/forgotPassword.php';
+    }
+
     public function login(): void
     {
         session_start();
@@ -27,7 +37,8 @@ class AuthController
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['name'];
 
-            header('Location: /dashboard');
+            $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
+            header('Location: ' . ($base ?: '') . '/dashboard');
             exit;
         }
 
@@ -44,7 +55,8 @@ class AuthController
 
         session_destroy();
 
-        header('Location: /login');
+        $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/\\');
+        header('Location: ' . ($base ?: '') . '/login');
         exit;
     }
 }

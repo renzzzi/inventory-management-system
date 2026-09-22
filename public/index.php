@@ -6,7 +6,14 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-if ($uri !== '/') {
+$basePath = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+if ($basePath !== '/' && $basePath !== '' && str_starts_with($uri, $basePath)) {
+    $uri = substr($uri, strlen($basePath));
+}
+
+if ($uri === '' || $uri === false) {
+    $uri = '/';
+} elseif ($uri !== '/') {
     $uri = rtrim($uri, '/');
 }
 
